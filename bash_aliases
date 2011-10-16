@@ -1,18 +1,35 @@
+# Shell
 alias ls='ls --color=auto'
-alias l='ls -CF --color=auto'
+alias l='ls -CF'
 alias lsl='ls -l'
 alias ll='ls -l'
 alias lsa='ls -A'
 alias la='ls -A'
 alias lsla='ls -la'
 
-alias grepn='grep -n -A1 -B1 --color=auto'
+alias ..='cd ..'
 
-alias vles='vim -u /usr/share/vim/vim72/macros/less.vim'
 alias mkdir='mkdir -p'
+alias md='mkdir'
+
+alias cls='clear; pwd; ls'
+
+# Grep
+alias grepn='grep -n -A1 -B1 --color=auto'
+alias greps='ps ax | grep -v grep | grep'
+
+# Vim
+alias vles='vim -u /usr/share/vim/vim72/macros/less.vim'
+
+# Git
+alias G='git'
+
+# Screen
 alias scrls='screen -ls'
 alias scr='screen -r'
-alias cls='clear; pwd; ls'
+
+# admin
+alias S='sudo'
 
 function tryone() { v=($@ -or '.'); echo $v; }
 function duh() { du -hs "$@"/*; }
@@ -21,10 +38,6 @@ function mvcd() { mv "$1" "$2" && cd "$2"; }
 function mkcp() { mkdir -p "$1" && eval cp "\"$2\" \"$1\""; }
 function mkmv() { mkdir -p "$1" && eval mv "\"$2\" \"$1\""; }
 function swap() { eval mv "\"$1\"" "\"$2\".bk" && eval mv "\"$2\"" "\"$1\"" && eval mv "\"$2\".bk" "\"$2\""; }
-function greps() { ps aux | grep -v grep | grep $1; }
-
-function stage() { hg push && cap staging update:code; }
-function produce() { hg push && cap production update:code; }
 
 function x() {
 	case $@ in
