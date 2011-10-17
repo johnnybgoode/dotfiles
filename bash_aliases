@@ -15,6 +15,9 @@ alias md='mkdir'
 alias cls='clear; pwd; ls'
 
 # Grep
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 alias grepn='grep -n -A1 -B1 --color=auto'
 alias greps='ps ax | grep -v grep | grep'
 
