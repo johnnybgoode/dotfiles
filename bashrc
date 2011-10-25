@@ -20,8 +20,11 @@ export HISTCONTROL=ignoreboth
 export HISTIGNORE="rm *"
 
 # Tab / Shift-tab
-bind '"\t": menu-complete'
-bind '"\e[Z": menu-complete-backward'
+# bind '"\t": menu-complete'
+# bind '"\e[Z": menu-complete-backward'
+# left left
+bind '"\e[C\e[C": menu-complete'
+bind '"\e[C\e[C": menu-complete-backward'
 
 # Page up/down
 # bind '"\e[5~": history-search-backward'
