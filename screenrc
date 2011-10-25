@@ -9,7 +9,7 @@ defscrollback 5000
 
 shelltitle "$ |$"
 hardstatus alwayslastline
-hardstatus string "%{= bg}%-w%{= gk}%n%{= bg}%t%{= bg}%+w %-=%{= gk} %{= bg} %M%d %{-} %{= gk}${USER}@%H "
+hardstatus string "%{= bg} %-w%{= gk}%n%{= bg}%t%{= bg}%+w %-=%{= gk} %{= bg} %M%d %{-} %{= gk}${USER}@%H "
 #hardstatus string "%{.kW}%-w%{.W}%n %t%{-}%{=b kw}%?%+w%? %=%c %d/%m/%Y"
 #hardstatus alwayslastline '%{bk}[ %{W}%H %{b}][ %{w}%l%{b} ]   %{b}[%{w} %D %d.%m %c:%s%{b} ]'
 #hardstatus alwayslastline '%{bk}[%{W}%H%{b}] %{w} %l %= %n*%t%{-b r}%{w}%+w %= %{w}%d %D %{w}%c'
@@ -41,6 +41,7 @@ pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 screen 1 
 screen 2
 screen 3
+
 select 1
 
 # start numbering at 1
