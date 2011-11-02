@@ -22,17 +22,17 @@ export HISTIGNORE="rm *"
 # Tab / Shift-tab
 # bind '"\t": menu-complete'
 # bind '"\e[Z": menu-complete-backward'
-# left left
-bind '"\e[C\e[C": menu-complete'
-bind '"\e[C\e[C": menu-complete-backward'
+# shift right right / shift left left
+bind '"\e[1;2C\e[1;2C": menu-complete'
+bind '"\e[1;2D\e[1;2D": menu-complete-backward'
 
 # Page up/down
 # bind '"\e[5~": history-search-backward'
 # bind '"\e[6~": history-search-forward'
 
-# Arrow Shift-left/right
-bind '"\e[1;2C": history-search-backward'
-bind '"\e[1;2D": history-search-forward'
+# CTRL Shift-left/right
+bind '"\e[1;6C": history-search-backward'
+bind '"\e[1;6D": history-search-forward'
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
