@@ -30,7 +30,7 @@ bind '"\e[1;2D\e[1;2D": menu-complete-backward'
 # bind '"\e[5~": history-search-backward'
 # bind '"\e[6~": history-search-forward'
 
-# CTRL Shift-left/right
+# CTRL Shift-right/left
 bind '"\e[1;6C": history-search-backward'
 bind '"\e[1;6D": history-search-forward'
 
@@ -117,3 +117,6 @@ fi
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
+
+source $HOME/.rvm/scripts/rvm
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
