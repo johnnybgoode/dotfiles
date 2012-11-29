@@ -1,5 +1,6 @@
 # Shell
 alias ls='ls --color=auto'
+alias sl='ls'
 alias l='ls -CF'
 alias lsl='ls -l'
 alias ll='ls -l'
@@ -33,6 +34,8 @@ alias scr='screen -r'
 
 # admin
 alias S='sudo'
+alias follow='tail -fn50'
+alias guard='guard -cdl 2.0'
 
 function tryone() { v=($@ -or '.'); echo $v; }
 function duh() { du -hs "$@"/*; }
@@ -41,6 +44,11 @@ function mvcd() { mv "$1" "$2" && cd "$2"; }
 function mkcp() { mkdir -p "$1" && eval cp "\"$2\" \"$1\""; }
 function mkmv() { mkdir -p "$1" && eval mv "\"$2\" \"$1\""; }
 function swap() { eval mv "\"$1\"" "\"$2\".bk" && eval mv "\"$2\"" "\"$1\"" && eval mv "\"$2\".bk" "\"$2\""; }
+
+function tssh() { 
+	REMOTE=$1; shift;
+	tar -cf - $@ | pv -s $(du -sb $@ | awk '{sum+=$1} END {print sum}') | ssh $REMOTE "cat - > test.tgz";
+}
 
 function x() {
 	case $@ in
@@ -87,4 +95,24 @@ Path=${full_path}
 DateDeleted=${date_deleted}
 EOF
 		done
+}
+
+function fif( ) {
+	grep -Rni "$@" .
+}
+
+function srange( ) {
+	# Usage: srange <file> <line-from> <line-to>
+	sed "$2,$3p;d" $1
+}
+
+function mod_rename( ) {
+	if [ -z $1 ]; then
+		echo "Usage: rename NEW_FILENAME"
+		echo ""
+		exit 1
+	fi
+	for f in `ls .`; do
+		mv $f $1.${f##*.}
+	done
 }
