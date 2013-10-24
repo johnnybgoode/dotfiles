@@ -1,5 +1,5 @@
 # Shell
-alias ls='ls --color=auto'
+alias ls='ls --color=auto --group-directories-first'
 alias sl='ls'
 alias l='ls -CF'
 alias lsl='ls -l'
@@ -31,6 +31,11 @@ alias G='git'
 # Screen
 alias scrls='screen -ls'
 alias scr='screen -r'
+
+# Tmux
+alias tmuxn='tmux new -s'
+alias tmuxa='tmux attach -t'
+alias tmuxl='tmux ls'
 
 # admin
 alias S='sudo'
