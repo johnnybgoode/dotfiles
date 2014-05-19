@@ -15,6 +15,9 @@ alias md='mkdir'
 
 alias cls='clear; pwd; ls'
 
+alias ff='find . -maxdepth 1 -type f' # all files in cwd
+alias fd='find . -maxdepth 1 -type d | grep -v "^\.$"' # all dirs in cwd excluding '.'
+
 # Grep
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -33,9 +36,10 @@ alias scrls='screen -ls'
 alias scr='screen -r'
 
 # Tmux
-alias tmuxn='tmux new -s'
-alias tmuxa='tmux attach -t'
-alias tmuxl='tmux ls'
+alias tn='tmux new -s'
+alias ta='tmux attach -dt'
+alias tl='tmux ls'
+alias tk='tmux kill-session -t'
 
 # admin
 alias S='sudo'
@@ -103,7 +107,7 @@ EOF
 }
 
 function fif( ) {
-	grep -Rni "$@" .
+	egrep -Rni "$@" .
 }
 
 function srange( ) {
