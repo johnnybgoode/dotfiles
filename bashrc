@@ -7,7 +7,7 @@ export EDITOR=`which vim`
 
 # PATH
 export PATH=$PATH:"~/bin"
-export PATH=$PATH:'/var/lib/gems/1.8/bin'
+#export PATH=$PATH:'/var/lib/gems/1.8/bin'
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -17,7 +17,8 @@ export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
 export HISTCONTROL=ignoreboth
 # ignore some commands which could be dangerous to repeat
-export HISTIGNORE="rm *"
+#export HISTIGNORE="rm *"
+export HISTIGNORE="sudo rm *"
 
 # Tab / Shift-tab
 # bind '"\t": menu-complete'
@@ -118,5 +119,9 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
+# RVM
 source $HOME/.rvm/scripts/rvm
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+#PHPSH
+export PYTHONPATH=~/lib/python2.7/site-packages
