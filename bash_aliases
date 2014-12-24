@@ -17,6 +17,9 @@ alias cls='clear; pwd; ls'
 
 alias ff='find . -maxdepth 1 -type f' # all files in cwd
 alias fd='find . -maxdepth 1 -type d | grep -v "^\.$"' # all dirs in cwd excluding '.'
+#alias nd='find . -maxdepth 1 -type d | wc -l | awk "{print $1 - 1}" }' # count dirs in current dir excluding '.'
+alias nd='find . -maxdepth 1 -type d | grep -v "\.$" | wc -l'
+alias nf='find . -maxdepth 1 -type f | wc -l' # cound files in current dir
 
 # Grep
 alias grep='grep --color=auto'
@@ -53,6 +56,7 @@ function mvcd() { mv "$1" "$2" && cd "$2"; }
 function mkcp() { mkdir -p "$1" && eval cp "\"$2\" \"$1\""; }
 function mkmv() { mkdir -p "$1" && eval mv "\"$2\" \"$1\""; }
 function swap() { eval mv "\"$1\"" "\"$2\".bk" && eval mv "\"$2\"" "\"$1\"" && eval mv "\"$2\".bk" "\"$2\""; }
+
 
 function tssh() { 
 	REMOTE=$1; shift;
@@ -125,3 +129,34 @@ function mod_rename( ) {
 		mv $f $1.${f##*.}
 	done
 }
+
+function sqldump( ) {
+	if [ -z "$*" ]; then
+		echo "Usage: sqldump database [host] [user]"
+		echo "  Supplying a username implies -p"
+		echo ""
+		exit 1
+	fi
+
+	DB="$1"
+	shift
+
+	OPTS=""
+	if [ -n "$1" ]; then
+		OPTS="-h$1 "
+		shift
+	fi
+	if [ -n "$1" ]; then
+		OPTS="$OPTS -u$1 -p"
+	fi
+
+	OPTS="$OPTS $DB"
+
+	FILENAME="$DB.`/bin/date +%Y%m%dT%H%M%S`.sql"
+
+	mysqldump $OPTS > $FILENAME
+
+	echo "Dumped $DB to $FILENAME"
+}
+
+alias sql-dump=sqldump
