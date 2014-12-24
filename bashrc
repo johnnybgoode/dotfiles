@@ -6,8 +6,11 @@
 export EDITOR=`which vim`
 
 # PATH
-export PATH=$PATH:"~/bin"
-#export PATH=$PATH:'/var/lib/gems/1.8/bin'
+# Don't duplicate PATH in tmux
+if [ -z "$TMUX" ]; then
+  export PATH=$PATH:"/home/john/bin"
+  #export PATH=$PATH:'/var/lib/gems/1.8/bin'
+fi
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -93,13 +96,13 @@ fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
-    ;;
-*)
-    ;;
-esac
+#case "$TERM" in
+#xterm*|rxvt*)
+#    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
+#    ;;
+#*)
+#    ;;
+#esac
 
 # Source alias definitions.
 
@@ -119,9 +122,9 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
-# RVM
-source $HOME/.rvm/scripts/rvm
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-#PHPSH
-export PYTHONPATH=~/lib/python2.7/site-packages
+# Plugins / tools
+if [ -z "$TMUX" ] && [ -d ~/.bashrc.d ]; then
+	for config in ~/.bashrc.d/*; do
+		source "$config"
+	done
+fi
