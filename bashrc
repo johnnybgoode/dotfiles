@@ -111,7 +111,7 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 # enable color support of ls
-if [ "$TERM" != "dumb" ] && [ -x /usr/bin/dircolors ]; then
+if [ "$TERM" != "dumb" ] && [ -x /usr/bin/dircolors ] && [ -d ~/.dircolors ]; then
     eval "`dircolors ~/.dircolors`"
 fi
 
@@ -128,3 +128,14 @@ if [ -z "$TMUX" ] && [ -d ~/.bashrc.d ]; then
 		source "$config"
 	done
 fi
+
+# Hipchat
+export HIPCHAT_USER="johne@easternstandard.com"
+
+# NVM / Node.js
+export NVM_DIR="/home/john/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+NP=$(which node)
+BP=${NP%bin/node} #this replaces the string '/bin/node'
+LP="${BP}lib/node_modules"
+export NODE_PATH="$LP";
