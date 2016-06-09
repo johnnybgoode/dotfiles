@@ -1,0 +1,10 @@
+[user]
+	email = j.entwistle76@gmail.com
+	name = John
+[alias]
+	st = status
+	co = checkout
+	ci = commit -v
+  cb = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
+[push]
+	default = simple
