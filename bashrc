@@ -8,7 +8,7 @@ export EDITOR=`which vim`
 # PATH
 # Don't duplicate PATH in tmux
 if [ -z "$TMUX" ]; then
-  export PATH=$PATH:"/home/john/bin"
+  export PATH=$PATH:"/Users/john/bin":"/Users/john/bin/platform-tools"
   #export PATH=$PATH:'/var/lib/gems/1.8/bin'
 fi
 
@@ -37,6 +37,10 @@ bind '"\e[1;2D\e[1;2D": menu-complete-backward'
 # CTRL Shift-right/left
 bind '"\e[1;6C": history-search-backward'
 bind '"\e[1;6D": history-search-forward'
+
+# word navigation
+#"\e[1;5C": forward-word
+#"\e[1;5D": backward-word
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -85,9 +89,10 @@ else
 fi
 
 if [ "$color_prompt" = yes ]; then
+  source ~/bin/git-prompt.sh
 	# [TIME] [CWD] (git branch)
 	# USER@HOST$
-	PS1="\[\e[1;36m\][\T]\[\e[m\] \[\e[0;33m\]\W"'$(__git_ps1)'"\[\e[m\] 
+	PS1="\[\e[1;36m\][\T]\[\e[m\] \[\e[0;33m\]\W "'$(__git_ps1)'"\[\e[m\] 
 \[\e[0;32m\]\u\[\e[m\]\[\e[0;33m\]@\[\e[m\]\[\e[0;32m\]\h\[\e[m\]\[\e[0;31m\]$\[\e[m\] "$PS1
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '$PS1
@@ -123,19 +128,23 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 # Plugins / tools
-if [ -z "$TMUX" ] && [ -d ~/.bashrc.d ]; then
+#if [ -z "$TMUX" ] && [ -d ~/.bashrc.d ]; then
+if [ -d ~/.bashrc.d ]; then
 	for config in ~/.bashrc.d/*; do
 		source "$config"
 	done
 fi
 
-# Hipchat
-export HIPCHAT_USER="johne@easternstandard.com"
+#export PATH="$PATH:/Applications/DevDesktop/tools"
 
-# NVM / Node.js
-export NVM_DIR="/home/john/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-NP=$(which node)
-BP=${NP%bin/node} #this replaces the string '/bin/node'
-LP="${BP}lib/node_modules"
-export NODE_PATH="$LP";
+# added by travis gem
+[ -f /Users/john/.travis/travis.sh ] && source /Users/john/.travis/travis.sh
+
+# Quicken scripts
+PATH="$PATH:/Users/john/src/quicken/bin"
+
+PATH="/Users/john/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/john/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/john/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/john/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/john/perl5"; export PERL_MM_OPT;

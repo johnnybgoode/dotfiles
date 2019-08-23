@@ -1,5 +1,5 @@
 # Shell
-alias ls='ls --color=auto --group-directories-first'
+alias ls='ls -G'
 alias sl='ls'
 alias l='ls -CF'
 alias lsl='ls -l'
@@ -33,6 +33,12 @@ alias vles='vim -u /usr/share/vim/vim72/macros/less.vim'
 
 # Git
 alias G='git'
+alias __git_ps1="git branch 2>/dev/null | grep '*' | sed 's/* \(.*\)/(\1)/'"
+function cdroot() {
+  if [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
+    cd `git rev-parse --show-cdup`
+  fi
+}
 
 # Screen
 alias scrls='screen -ls'
@@ -40,7 +46,7 @@ alias scr='screen -r'
 
 # Tmux
 alias tn='tmux new -s'
-alias ta='tmux attach -dt'
+alias ta='tmux attach -t'
 alias tl='tmux ls'
 alias tk='tmux kill-session -t'
 
@@ -48,6 +54,10 @@ alias tk='tmux kill-session -t'
 alias S='sudo'
 alias follow='tail -fn50'
 alias guard='guard -cdl 2.0'
+
+# SSH
+alias ssh-fingerprint='ssh-keygen -l -E md5 -f'
+alias ssh-keygen='ssh-keygen -m PEM -t rsa -b 4096 -C john@thirdandgrove.com'
 
 function tryone() { v=($@ -or '.'); echo $v; }
 function duh() { du -hs "$@"/*; }
@@ -159,4 +169,88 @@ function sqldump( ) {
 	echo "Dumped $DB to $FILENAME"
 }
 
+
 alias sql-dump=sqldump
+
+function encrypt( ) {
+  if [ -z $1 ]; then
+    echo "Supply file to encrypt"
+    exit 1
+  fi
+
+  INF="$1"
+  shift
+
+  OF=""
+  if [ -n "$1" ]; then
+    OF=" -out $1"
+  fi
+
+  openssl rsautl -encrypt -pubin -inkey ~/.ssh/id_rsa.pub.pem -ssl -in $INF $OF
+}
+
+function decrypt( ) {
+  if [ -z "$1" ]; then
+    echo "Supply file to decrypt"
+    exit 1
+  fi
+
+  INF="$1"
+  shift
+
+  OF=""
+  if [ -n "$1" ]; then
+    OF=" -out $1"
+  fi
+
+  openssl rsautl -decrypt -inkey ~/.ssh/id_rsa -in $INF $OF
+}
+
+##
+## Completion
+##
+
+# tmux attach
+_tl () {
+  COMPREPLY=( $(compgen -W "$(tmux ls | awk '{print $1}' | cut -d':' -f 1)" -- "${COMP_WORDS[$COMP_CWORD]}" ) )
+}
+complete -o default -F _tl ta
+
+##
+## Docker
+##
+function dockerbin {
+  if [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
+    GIT_ROOT=$(git rev-parse --show-cdup)
+  else
+    GIT_ROOT="."
+  fi
+
+  if [ -d "$GIT_ROOT/docker/bin" ]; then
+    if [ -f "$GIT_ROOT/docker/bin/$1" ]; then
+      $GIT_ROOT/docker/bin/$1 "${@:2}"
+    else
+      echo "That dockerbin command doesn't exist"
+      return 1
+    fi
+  else
+    echo "You must run this command from within a docker project with a docker/bin directory."
+    return 1
+  fi
+}
+export -f dockerbin
+
+function blt() {
+  if [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
+    GIT_ROOT=$(git rev-parse --show-cdup)
+  else
+    GIT_ROOT="."
+  fi
+
+  if [ -f "$GIT_ROOT/vendor/bin/blt" ]; then
+    $GIT_ROOT/vendor/bin/blt "$@"
+  else
+    echo "You must run this command from within a BLT-generated project repository."
+    return 1
+  fi
+}

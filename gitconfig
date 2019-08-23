@@ -1,10 +1,22 @@
 [user]
-	email = j.entwistle76@gmail.com
-	name = John
+	email = john@thirdandgrove.com
+	name = John Entwistle
 [alias]
 	st = status
 	co = checkout
 	ci = commit -v
-  cb = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
+  #cb = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
+  sc = diff --diff-filter=U
+  logf = log
+  log = log --oneline
+  cdiff = "!f() { git log --oneline --graph ..$1 }; f"
 [push]
 	default = simple
+[core]
+	excludesfile = /Users/john/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
