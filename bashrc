@@ -128,23 +128,50 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 # Plugins / tools
-#if [ -z "$TMUX" ] && [ -d ~/.bashrc.d ]; then
 if [ -d ~/.bashrc.d ]; then
 	for config in ~/.bashrc.d/*; do
 		source "$config"
 	done
 fi
 
-#export PATH="$PATH:/Applications/DevDesktop/tools"
-
 # added by travis gem
 [ -f /Users/john/.travis/travis.sh ] && source /Users/john/.travis/travis.sh
 
-# Quicken scripts
-PATH="$PATH:/Users/john/src/quicken/bin"
-
+# perl
 PATH="/Users/john/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/Users/john/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/Users/john/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/Users/john/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/john/perl5"; export PERL_MM_OPT;
+
+# phpenv
+#export PATH="$HOME/.phpenv/bin:$PATH"
+#eval "$(phpenv init -)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# composer
+export COMPOSER_MEMORY_LIMIT=-1
+function blt() {
+  if [[ ! -z ${AH_SITE_ENVIRONMENT} ]]; then
+    PROJECT_ROOT="/var/www/html/${AH_SITE_GROUP}.${AH_SITE_ENVIRONMENT}"
+  elif [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
+    PROJECT_ROOT=$(git rev-parse --show-cdup)
+  else
+    PROJECT_ROOT="."
+  fi
+
+  if [ -f "$PROJECT_ROOT/vendor/bin/blt" ]; then
+    $PROJECT_ROOT/vendor/bin/blt "$@"
+
+  # Check for local BLT.
+  elif [ -f "./vendor/bin/blt" ]; then
+    ./vendor/bin/blt "$@"
+
+  else
+    echo "You must run this command from within a BLT-generated project."
+    return 1
+  fi
+}

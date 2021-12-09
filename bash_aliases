@@ -121,7 +121,41 @@ EOF
 }
 
 function fif( ) {
-	egrep -Rni "$@" .
+  exclude_dir='--exclude-dir=node_modules'
+  #name_only=''
+
+  while [ "$1" ]; do
+    case "$1" in
+      -e)
+        _IFS="$IFS"
+        IFS=',' read -r -a exclude_dirs <<< "$2"
+        IFS="$_IFS"
+        for dir in "${exclude_dirs[@]}"; do
+          exclude_dir="--exclude-dir=${dir} ${exclude_dir}"
+        done
+        shift
+        shift
+      ;;
+  #    -n)
+  #      name_only=" | awk -F: '{ print \$1 }' | sort | uniq"
+  #      shift
+  #    ;;
+      *)
+        break
+      ;;
+    esac
+  done
+
+  if [ -z "$@" ]; then
+    echo 'Missing search pattern.'
+    return 1
+  fi
+
+	fgrep -Rni ${exclude_dir} "${@}" . ${name_only}
+}
+
+function fifn( ) {
+  fif $@ | awk -F: '{ print $1 }' | sort | uniq
 }
 
 function srange( ) {
@@ -219,26 +253,26 @@ complete -o default -F _tl ta
 ##
 ## Docker
 ##
-function dockerbin {
-  if [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
-    GIT_ROOT=$(git rev-parse --show-cdup)
-  else
-    GIT_ROOT="."
-  fi
-
-  if [ -d "$GIT_ROOT/docker/bin" ]; then
-    if [ -f "$GIT_ROOT/docker/bin/$1" ]; then
-      $GIT_ROOT/docker/bin/$1 "${@:2}"
-    else
-      echo "That dockerbin command doesn't exist"
-      return 1
-    fi
-  else
-    echo "You must run this command from within a docker project with a docker/bin directory."
-    return 1
-  fi
-}
-export -f dockerbin
+#function dockerbin {
+#  if [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
+#    GIT_ROOT=$(git rev-parse --show-cdup)
+#  else
+#    GIT_ROOT="."
+#  fi
+#
+#  if [ -d "$GIT_ROOT/docker/bin" ]; then
+#    if [ -f "$GIT_ROOT/docker/bin/$1" ]; then
+#      $GIT_ROOT/docker/bin/$1 "${@:2}"
+#    else
+#      echo "That dockerbin command doesn't exist"
+#      return 1
+#    fi
+#  else
+#    echo "You must run this command from within a docker project with a docker/bin directory."
+#    return 1
+#  fi
+#}
+#export -f dockerbin
 
 function blt() {
   if [ "`git rev-parse --show-cdup 2> /dev/null`" != "" ]; then
@@ -253,4 +287,8 @@ function blt() {
     echo "You must run this command from within a BLT-generated project repository."
     return 1
   fi
+}
+
+function git-cherry-pick-merge() {
+  git log $1^..$1 --pretty=format:%H --reverse | xargs git cherry-pick -m1 --keep-redundant-commits
 }

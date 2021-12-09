@@ -7,8 +7,7 @@
 	ci = commit -v
   #cb = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
   sc = diff --diff-filter=U
-  logf = log
-  log = log --oneline
+  lo = "log --oneline"
   cdiff = "!f() { git log --oneline --graph ..$1 }; f"
 [push]
 	default = simple
