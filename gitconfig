@@ -1,10 +1,44 @@
 [user]
-	email = j.entwistle76@gmail.com
-	name = John
+	email = jentwistle@hubspot.com
+	name = John Entwistle
+	signingkey = /Users/jentwistle/.ssh/id_rsa.pub
 [alias]
 	st = status
 	co = checkout
 	ci = commit -v
-  cb = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
+  cin = commit -v --no-verify
+  df = diff
+  dfc = diff --cached
+  dfn = diff --name-only
+  dfnc = diff --cached --name-only
+  sh = show
+  shn = show --name-only
+  crbr = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
+  cb = ! git status | grep 'On branch' | awk '{ print $3 }'
+  bs = branch-select
+	merge-commits = "!funct() { git log --merges --reverse --pretty=authoroneline --ancestry-path $1 | grep \"Merge pull request\";  }; funct"
+	pr-number = "!funct() { echo \"$1\" | sed -n \"s/^.*Merge pull request #\\\\s*\\\\([0-9]*\\\\).*$/\\\\1/p\"; }; funct"
+	web-url = "!funct() { git config remote.origin.url | sed -e\"s/git@/https:\\/\\//\" -e\"s/\\.git$//\" | sed -E \"s/(\\/\\/[^:]*):/\\1\\//\"; }; funct"
+	pr-link = "!funct() { echo \"`git web-url`/pull/`git pr-number \"$1\"`\"; }; funct"
+  pr-label = "!funct() { gh pr view \"$(git pr-link \"$1\")\" | head -n1 | sed \"s/^title:\\\\t*\\\\(.*\\\\)/\\\\1/\"; }; funct"
+  pr-view = "!funct() { echo \"`echo \"$1\" | awk '{ print \"@\"$2 }'` [#`git pr-number \"$1\"`](`git pr-link \"$1\"`) - `git pr-label \"$1\"`\"; }; funct"
+  changelog = "!funct() { git merge-commits $1 | xargs -I{} git pr-view {}; }; funct"
+  format-prettier = "!funct() { git diff --cached --name-only | xargs bend hs-prettier write; }; funct"
+  pull-master= "!funct() { git checkout master && git pull && git checkout -; }; funct"
 [push]
 	default = simple
+[core]
+	hooksPath = /Users/jentwistle/.git_hooks
+	excludesfile = /Users/jentwistle/.gitignore_global
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+#[format]
+	#pretty= authoroneline
+[pretty]
+  authoroneline = format:%h %al %s
+  #oneline = format:%h %al %s
+[gpg]
+	format = ssh
