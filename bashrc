@@ -8,7 +8,7 @@ export EDITOR=`which vim`
 # PATH
 # Don't duplicate PATH in tmux
 if [ -z "$TMUX" ]; then
-  export PATH=$PATH:"/home/john/bin"
+  export PATH=$PATH:"${HOME}/bin"
   #export PATH=$PATH:'/var/lib/gems/1.8/bin'
 fi
 
@@ -84,14 +84,14 @@ else
 	PS1=''
 fi
 
-if [ "$color_prompt" = yes ]; then
-	# [TIME] [CWD] (git branch)
-	# USER@HOST$
-	PS1="\[\e[1;36m\][\T]\[\e[m\] \[\e[0;33m\]\W"'$(__git_ps1)'"\[\e[m\] 
-\[\e[0;32m\]\u\[\e[m\]\[\e[0;33m\]@\[\e[m\]\[\e[0;32m\]\h\[\e[m\]\[\e[0;31m\]$\[\e[m\] "$PS1
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '$PS1
-fi
+#if [ "$color_prompt" = yes ]; then
+#	# [TIME] [CWD] (git branch)
+#	# USER@HOST$
+#	PS1="\[\e[1;36m\][\T]\[\e[m\] \[\e[0;33m\]\W"'$(__git_ps1)'"\[\e[m\] 
+#\[\e[0;32m\]\u\[\e[m\]\[\e[0;33m\]@\[\e[m\]\[\e[0;32m\]\h\[\e[m\]\[\e[0;31m\]$\[\e[m\] "$PS1
+#else
+#    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '$PS1
+#fi
 
 unset color_prompt force_color_prompt
 
@@ -129,9 +129,6 @@ if [ -z "$TMUX" ] && [ -d ~/.bashrc.d ]; then
 	done
 fi
 
-# Hipchat
-export HIPCHAT_USER="johne@easternstandard.com"
-
 # NVM / Node.js
 export NVM_DIR="/home/john/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -139,3 +136,14 @@ NP=$(which node)
 BP=${NP%bin/node} #this replaces the string '/bin/node'
 LP="${BP}lib/node_modules"
 export NODE_PATH="$LP";
+
+# Homebrew
+if command -v brew &> /dev/null; then
+  brew --prefix
+  PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
+fi
+
+PATH="$(which code):$PATH"
+
+# Added by nex: https://git.hubteam.com/HubSpot/nex
+. ~/.hubspot/shellrc

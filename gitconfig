@@ -15,7 +15,12 @@
   shn = show --name-only
   crbr = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
   cb = ! git status | grep 'On branch' | awk '{ print $3 }'
-  bs = branch-select
+  pu = ! git push -u $(git remote) $(git cb)
+  fp = push -f
+  bd = branch -d
+  #bD = branch -D
+  bs = branch-select -l
+  bsa = branch-select
 	merge-commits = "!funct() { git log --merges --reverse --pretty=authoroneline --ancestry-path $1 | grep \"Merge pull request\";  }; funct"
 	pr-number = "!funct() { echo \"$1\" | sed -n \"s/^.*Merge pull request #\\\\s*\\\\([0-9]*\\\\).*$/\\\\1/p\"; }; funct"
 	web-url = "!funct() { git config remote.origin.url | sed -e\"s/git@/https:\\/\\//\" -e\"s/\\.git$//\" | sed -E \"s/(\\/\\/[^:]*):/\\1\\//\"; }; funct"
@@ -24,7 +29,9 @@
   pr-view = "!funct() { echo \"`echo \"$1\" | awk '{ print \"@\"$2 }'` [#`git pr-number \"$1\"`](`git pr-link \"$1\"`) - `git pr-label \"$1\"`\"; }; funct"
   changelog = "!funct() { git merge-commits $1 | xargs -I{} git pr-view {}; }; funct"
   format-prettier = "!funct() { git diff --cached --name-only | xargs bend hs-prettier write; }; funct"
-  pull-master= "!funct() { git checkout master && git pull && git checkout -; }; funct"
+  pull-master = "!funct() { git checkout master && git pull; }; funct"
+  rebase-master = "!funct() { git pull-master && git co - && git rebase master; }; funct"
+  cpbr = "!funct() { git checkout -b \"je/`git rev-parse --abbrev-ref HEAD`\"; }; funct"
 [push]
 	default = simple
 [core]
@@ -42,3 +49,7 @@
   #oneline = format:%h %al %s
 [gpg]
 	format = ssh
+[commit]
+	gpgsign = true
+[init]
+	defaultBranch = master

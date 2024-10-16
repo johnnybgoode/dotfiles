@@ -21,10 +21,12 @@ alias fd='find . -maxdepth 1 -type d | grep -v "^\.$"' # all dirs in cwd excludi
 alias nd='find . -maxdepth 1 -type d | grep -v "\.$" | wc -l'
 alias nf='find . -maxdepth 1 -type f | wc -l' # cound files in current dir
 
+alias rmr='rm -r'
+
 # Grep
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+alias egrep='grep -E --color=auto'
 alias grepn='grep -n -A1 -B1 --color=auto'
 alias greps='ps ax | grep -v grep | grep'
 
@@ -39,7 +41,7 @@ alias scrls='screen -ls'
 alias scr='screen -r'
 
 # Tmux
-alias tn='tmux new -s'
+function tn() { tmux new -s $(pwd | awk -F'/' '{ print $NF }') }
 alias ta='tmux attach -dt'
 alias tl='tmux ls'
 alias tk='tmux kill-session -t'
@@ -78,7 +80,7 @@ function x() {
 	esac
 }
 
-function trash( ) {
+function trash() {
 	TRASHPATH=~/.local/share/Trash
 
 	if [ -z "$*" ]; then
@@ -110,16 +112,20 @@ EOF
 		done
 }
 
-function fif( ) {
-	egrep -Rni "$@" .
+function fif() {
+	grep -ERni "$@" .
 }
 
-function srange( ) {
+function fijs() {
+  grep -ERni --exclude-dir=target --exclude-dir=node_modules --exclude-dir=".git" "$@" .
+}
+
+function srange() {
 	# Usage: srange <file> <line-from> <line-to>
 	sed "$2,$3p;d" $1
 }
 
-function mod_rename( ) {
+function mod_rename() {
 	if [ -z $1 ]; then
 		echo "Usage: rename NEW_FILENAME"
 		echo ""
@@ -130,7 +136,7 @@ function mod_rename( ) {
 	done
 }
 
-function sqldump( ) {
+function sqldump() {
 	if [ -z "$*" ]; then
 		echo "Usage: sqldump database [host] [user]"
 		echo "  Supplying a username implies -p"
@@ -160,3 +166,17 @@ function sqldump( ) {
 }
 
 alias sql-dump=sqldump
+
+function lsStaticModules() {
+  find "$1" -maxdepth 2 -type d -name "static" | sed "s/\/static//"
+}
+
+function countCodeFiles() {
+  DIR="$1"
+  TYPE="$2"
+  case $TYPE in
+    -ts) find "$DIR" \( -iname "*.ts" -o -iname "*.tsx" \) ;;
+    *) find "$DIR" \( -iname '*.js' -o -iname '*.ts' -o -iname '*.tsx' \) ;;
+  esac
+
+}
