@@ -1,7 +1,7 @@
 [user]
-	email = jentwistle@hubspot.com
+	email = j.entwistle76@gmail.com
 	name = John Entwistle
-	signingkey = /Users/jentwistle/.ssh/id_rsa.pub
+	signingkey = /Users/john/.ssh/id_ed25519.pub
 [alias]
 	st = status
 	co = checkout
@@ -34,9 +34,6 @@
   cpbr = "!funct() { git checkout -b \"je/`git rev-parse --abbrev-ref HEAD`\"; }; funct"
 [push]
 	default = simple
-[core]
-	hooksPath = /Users/jentwistle/.git_hooks
-	excludesfile = /Users/jentwistle/.gitignore_global
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
