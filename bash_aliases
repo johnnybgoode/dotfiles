@@ -1,5 +1,5 @@
 # Shell
-alias ls='ls --color=auto --group-directories-first'
+alias ls='ls --color=auto'
 alias sl='ls'
 alias l='ls -CF'
 alias lsl='ls -l'
