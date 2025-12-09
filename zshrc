@@ -107,9 +107,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source $HOME/.bash_aliases
 
-# Added by nex: https://git.hubteam.com/HubSpot/nex
-. ~/.hubspot/shellrc
-
 # Git completion
  zstyle ':completion:*:*:git:*' script ~/.git-completion/git-completion.bash
 fpath=(~/.git-completion $fpath)
