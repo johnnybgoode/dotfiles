@@ -1,11 +1,12 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
-PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
-PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
-PATH="$(which code):$PATH"
-export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
+# export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
+BREW_PREFIX=$(brew --prefix)
+#for bindir in "$BREW_PREFIX/opt/"*"/bin"; do export PATH=$bindir:$PATH; done
+for bindir in "$BREW_PREFIX/opt/"*"/libexec/gnubin"; do export PATH=$bindir:$PATH; done
+for mandir in "${BREW_PREFIX}/opt/"*"/libexec/gnuman"; do export MANPATH=$mandir:$MANPATH; done
+for mandir in "${BREW_PREFIX}/opt/"*"/share/man/man1"; do export MANPATH=$mandir:$MANPATH; done
+export PATH="$HOME/bin:${BREW_PREFIX}/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -76,7 +77,7 @@ ZSH_THEME="amuse"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-#plugins=(git git-extras)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -95,7 +96,7 @@ source $ZSH/oh-my-zsh.sh
 # fi
 
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# export ARCHFLAGS="-arch $(uname -a)"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -107,11 +108,16 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source $HOME/.bash_aliases
 
-# Git completion
- zstyle ':completion:*:*:git:*' script ~/.git-completion/git-completion.bash
-fpath=(~/.git-completion $fpath)
-
 # Key bindings
 #bindkey -e
 #bindkey '[C' forward-word
 #bindkey '[D' backward-word
+
+# Git completion
+#zstyle ':completion:*:*:git:*' script ~/.git-completion/git-completion.bash
+#fpath=(~/.git-completion $fpath)
+
+# NVM 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
