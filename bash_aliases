@@ -4,9 +4,12 @@ alias sl='ls'
 alias l='ls -CF'
 alias lsl='ls -l'
 alias ll='ls -l'
+alias llt='ls -lt'
 alias lsa='ls -A'
 alias la='ls -A'
 alias lsla='ls -la'
+alias lst='ls -t'
+alias lslt='ls -lt'
 
 alias ..='cd ..'
 
@@ -14,6 +17,8 @@ alias mkdir='mkdir -p'
 alias md='mkdir'
 
 alias cls='clear; pwd; ls'
+
+alias clm='/opt/homebrew/opt/util-linux/bin/column'
 
 alias ff='find . -maxdepth 1 -type f' # all files in cwd
 alias fd='find . -maxdepth 1 -type d | grep -v "^\.$"' # all dirs in cwd excluding '.'
@@ -50,6 +55,7 @@ alias tk='tmux kill-session -t'
 alias S='sudo'
 alias follow='tail -fn50'
 alias guard='guard -cdl 2.0'
+
 
 function tryone() { v=($@ -or '.'); echo $v; }
 function duh() { du -hs "$@"/*; }

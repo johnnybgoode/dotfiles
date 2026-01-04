@@ -143,7 +143,6 @@ if command -v brew &> /dev/null; then
   PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
-PATH="$(which code):$PATH"
-
-# Added by nex: https://git.hubteam.com/HubSpot/nex
-. ~/.hubspot/shellrc
+if [ ! -z $(which code) 2>/dev/null ]; then
+  export PATH="$(which code):$PATH"
+fi

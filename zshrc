@@ -3,7 +3,7 @@
 # export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
 BREW_PREFIX=$(brew --prefix)
 #for bindir in "$BREW_PREFIX/opt/"*"/bin"; do export PATH=$bindir:$PATH; done
-for bindir in "$BREW_PREFIX/opt/"*"/libexec/gnubin"; do export PATH=$bindir:$PATH; done
+for bindir in "$BREW_PREFIX/opt/"*"/libexec/gnubin";   do export PATH=$bindir:$PATH; done
 for mandir in "${BREW_PREFIX}/opt/"*"/libexec/gnuman"; do export MANPATH=$mandir:$MANPATH; done
 for mandir in "${BREW_PREFIX}/opt/"*"/share/man/man1"; do export MANPATH=$mandir:$MANPATH; done
 export PATH="$HOME/bin:${BREW_PREFIX}/bin:$PATH"
@@ -16,6 +16,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="amuse"
+
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -61,6 +62,16 @@ ZSH_THEME="amuse"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+# Disable command history
+HISTFILE=
+HISTSIZE=0
+SAVEHIST=0
+
+source $ZSH/oh-my-zsh.sh
+
+# Disable history confirmation e.g. !!, !$, ^old^new
+unsetopt HIST_VERIFY
+
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # You can set one of the optional three formats:
@@ -79,7 +90,6 @@ ZSH_THEME="amuse"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -121,3 +131,6 @@ source $HOME/.bash_aliases
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Created by `pipx` on 2025-12-22 03:27:30
+export PATH="$PATH:/Users/john/.local/bin"

@@ -5,6 +5,7 @@
 [alias]
 	st = status
 	co = checkout
+  cob = checkout -b
 	ci = commit -v
   cin = commit -v --no-verify
   df = diff
@@ -32,6 +33,10 @@
   pull-master = "!funct() { git checkout master && git pull; }; funct"
   rebase-master = "!funct() { git pull-master && git co - && git rebase master; }; funct"
   cpbr = "!funct() { git checkout -b \"je/`git rev-parse --abbrev-ref HEAD`\"; }; funct"
+  # if $1 is numeric and <5 assume a relative upstream, otherwise assume a commit sha and return the hash (inclusive)
+  #rup = ! "[ -z \"${1//[0-9]}\" -a \"${#1}\" -lt 5 ] && echo \"HEAD~$1\" || echo \"$1^\""
+  rup = "! sh -c \"[ -z \\\"${1//[0-9]}\\\" -a \\\"${#1}\\\" -lt 5 ] && echo \"HEAD~$1\" || echo \"$1^\"\" -"
+  rbi = "!funct() { UPSTREAM=`git rup \"$1\"` &&  git rebase -i \"$UPSTREAM\"; }; funct"
 [push]
 	default = simple
 [filter "lfs"]
