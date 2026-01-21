@@ -46,8 +46,9 @@ alias scrls='screen -ls'
 alias scr='screen -r'
 
 # Tmux
-function tn() { tmux new -s $(pwd | awk -F'/' '{ print $NF }') }
-alias ta='tmux attach -dt'
+# function tn() { tmux new -s $(pwd | awk -F'/' '{ print $NF }') }
+alias tn='tmux new -s  ${1:-${PWD##*/}}'
+function ta() { tmux attach -dt "${1:-${PWD##*/}}" }
 alias tl='tmux ls'
 alias tk='tmux kill-session -t'
 
