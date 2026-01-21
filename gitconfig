@@ -1,7 +1,7 @@
 [user]
 	email = j.entwistle76@gmail.com
-	name = John Entwistle
-	signingkey = /Users/john/.ssh/id_ed25519.pub
+  name = John Entwistle
+  signingkey = /Users/john/.ssh/gh_ed25519.pub
 [alias]
 	st = status
 	co = checkout
@@ -13,7 +13,7 @@
   dfn = diff --name-only
   dfnc = diff --cached --name-only
   sh = show
-  shn = show --name-only
+  shn = show --name-status
   crbr = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
   cb = ! git status | grep 'On branch' | awk '{ print $3 }'
   pu = ! git push -u $(git remote) $(git cb)
