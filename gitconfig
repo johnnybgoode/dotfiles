@@ -12,8 +12,9 @@
   dfc = diff --cached
   dfn = diff --name-only
   dfnc = diff --cached --name-only
-  sh = show
-  shn = show --name-status
+  head = "! sh -c \"[ \\\"${1//[^~~]}\\\" ] && echo \"HEAD${1#~*}\" || echo \"$1\"\" -"
+  sh = "! sh -c \"git show `git head \"$1\"`\" -"
+  shn = "! sh -c \"git show --name-status `git head \"$1\"`\" -"
   crbr = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
   cb = ! git status | grep 'On branch' | awk '{ print $3 }'
   pu = ! git push -u $(git remote) $(git cb)
