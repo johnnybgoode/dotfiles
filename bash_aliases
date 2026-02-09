@@ -16,6 +16,8 @@ alias ..='cd ..'
 alias mkdir='mkdir -p'
 alias md='mkdir'
 
+alias nv='nvim'
+
 alias cls='clear; pwd; ls'
 
 alias clm='/opt/homebrew/opt/util-linux/bin/column'
@@ -124,7 +126,7 @@ function fif() {
 }
 
 function fijs() {
-  grep -ERni --exclude-dir=target --exclude-dir=node_modules --exclude-dir=".git" "$@" .
+  grep -ERni --exclude-dir=dist --exclude-dir=build --exclude-dir=node_modules --exclude-dir=".git" "$@" .
 }
 
 function srange() {
