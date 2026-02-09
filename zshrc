@@ -1,12 +1,14 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-# export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
-BREW_PREFIX=$(brew --prefix)
-#for bindir in "$BREW_PREFIX/opt/"*"/bin"; do export PATH=$bindir:$PATH; done
-for bindir in "$BREW_PREFIX/opt/"*"/libexec/gnubin";   do export PATH=$bindir:$PATH; done
-for mandir in "${BREW_PREFIX}/opt/"*"/libexec/gnuman"; do export MANPATH=$mandir:$MANPATH; done
-for mandir in "${BREW_PREFIX}/opt/"*"/share/man/man1"; do export MANPATH=$mandir:$MANPATH; done
-export PATH="$HOME/bin:${BREW_PREFIX}/bin:$PATH"
+if [ -z "$TMUX" ]; then
+  BREW_PREFIX=$(brew --prefix)
+  #for bindir in "$BREW_PREFIX/opt/"*"/bin"; do export PATH=$bindir:$PATH; done
+  #for bindir in "$BREW_PREFIX/opt/"*"/libexec/gnubin";   do export PATH=$bindir:$PATH; done
+  #for mandir in "${BREW_PREFIX}/opt/"*"/libexec/gnuman"; do export MANPATH=$mandir:$MANPATH; done
+  #for mandir in "${BREW_PREFIX}/opt/"*"/share/man/man1"; do export MANPATH=$mandir:$MANPATH; done
+  export PATH="$HOME/bin:${BREW_PREFIX}/bin:$HOME/.docker/bin:$PATH"
+  #export PATH=$HOME/bin:/usr/local/bin:$PATH
+  #export PATH="$PATH:$HOME/bin:$HOME/.docker/bin"
+fi
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -17,7 +19,6 @@ export ZSH="$HOME/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="amuse"
 
-
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
@@ -25,7 +26,7 @@ ZSH_THEME="amuse"
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -60,12 +61,12 @@ ZSH_THEME="amuse"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Disable command history
-HISTFILE=
-HISTSIZE=0
-SAVEHIST=0
+#HISTFILE=
+#HISTSIZE=0
+#SAVEHIST=0
 
 source $ZSH/oh-my-zsh.sh
 
@@ -88,7 +89,7 @@ unsetopt HIST_VERIFY
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+#plugins=(git)
 
 
 # User configuration
@@ -116,7 +117,7 @@ plugins=(git)
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source $HOME/.bash_aliases
+source "$HOME/.bash_aliases"
 
 # Key bindings
 #bindkey -e
@@ -127,10 +128,22 @@ source $HOME/.bash_aliases
 #zstyle ':completion:*:*:git:*' script ~/.git-completion/git-completion.bash
 #fpath=(~/.git-completion $fpath)
 
-# NVM 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# NVM
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 # Created by `pipx` on 2025-12-22 03:27:30
-export PATH="$PATH:/Users/john/.local/bin"
+if [ -d "$HOME/.local/bin" ]; then
+  export PATH="$PATH:/Users/john/.local/bin"
+fi 
+
+# pnpm
+export PNPM_HOME="/Users/john/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
