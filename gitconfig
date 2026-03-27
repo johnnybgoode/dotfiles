@@ -1,7 +1,7 @@
 [user]
 	email = j.entwistle76@gmail.com
   name = John Entwistle
-  signingkey = /Users/john/.ssh/gh_ed25519.pub
+  signingkey = /Users/jack/.ssh/git_ed25519.pub
 [alias]
 	st = status
 	co = checkout
@@ -18,11 +18,14 @@
   crbr = "! sh -c \"git pull && git co -b $1 && git push -u origin $1\" -"
   cb = ! git status | grep 'On branch' | awk '{ print $3 }'
   pu = ! git push -u $(git remote) $(git cb)
+  lo = log --oneline
   fp = push -f
+  bl = "! git branch --color=always | cat"
+  bs = "! git branch --color=always | fzf --ansi --tmux bottom,40% | perl -pe 's/\\x1b\\[[0-9;]*m//g;s/^[* +\\s]*//' | xargs git checkout"
   bd = branch -d
   #bD = branch -D
-  bs = branch-select -l
-  bsa = branch-select
+  #bs = branch-select -l
+  #bsa = branch-select
 	merge-commits = "!funct() { git log --merges --reverse --pretty=authoroneline --ancestry-path $1 | grep \"Merge pull request\";  }; funct"
 	pr-number = "!funct() { echo \"$1\" | sed -n \"s/^.*Merge pull request #\\\\s*\\\\([0-9]*\\\\).*$/\\\\1/p\"; }; funct"
 	web-url = "!funct() { git config remote.origin.url | sed -e\"s/git@/https:\\/\\//\" -e\"s/\\.git$//\" | sed -E \"s/(\\/\\/[^:]*):/\\1\\//\"; }; funct"

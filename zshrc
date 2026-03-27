@@ -5,19 +5,24 @@ if [ -z "$TMUX" ]; then
   #for bindir in "$BREW_PREFIX/opt/"*"/libexec/gnubin";   do export PATH=$bindir:$PATH; done
   #for mandir in "${BREW_PREFIX}/opt/"*"/libexec/gnuman"; do export MANPATH=$mandir:$MANPATH; done
   #for mandir in "${BREW_PREFIX}/opt/"*"/share/man/man1"; do export MANPATH=$mandir:$MANPATH; done
-  export PATH="$HOME/bin:${BREW_PREFIX}/bin:$HOME/.docker/bin:$PATH"
+  
+  export PATH="$HOME/bin:$HOME/go/bin:$HOME/.local/bin:${BREW_PREFIX}/bin:$HOME/.docker/bin:$PATH"
   #export PATH=$HOME/bin:/usr/local/bin:$PATH
-  #export PATH="$PATH:$HOME/bin:$HOME/.docker/bin"
 fi
 
-# Path to your oh-my-zsh installation.
+source "$HOME/.zshrc.d/zsh-defer/zsh-defer.plugin.zsh"
+
+export EDITOR="nvim"
+
+## Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM="$HOME/.zshrc.d"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="amuse"
+ZSH_THEME="jeiv-amuse"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -26,7 +31,7 @@ ZSH_THEME="amuse"
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
-CASE_SENSITIVE="true"
+#CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -63,26 +68,25 @@ CASE_SENSITIVE="true"
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Disable command history
-#HISTFILE=
-#HISTSIZE=0
-#SAVEHIST=0
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+HIST_STAMPS="yyyy-mm-dd"
 
 source $ZSH/oh-my-zsh.sh
 
-# Disable history confirmation e.g. !!, !$, ^old^new
-unsetopt HIST_VERIFY
+# History - must be configured after sourcing oh-my-zsh
+HISTSIZE=10000
+SAVEHIST=10000
+unsetopt HIST_VERIFY # Disable history confirmation e.g. !!, !$, ^old^new
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# WIP Unique history per-pane 
+if [[ -n "$TMUX_PANE" ]]; then
+  [[ ! -d "$HOME/.zsh_history_tmux" ]] && mkdir -p "$HOME/.zsh_history_tmux"
+  HISTFILE="$HOME/.zsh_history_tmux/pane-${TMUX_PANE:1}.history"
+fi
+#setopt appendhistory
+#unsetopt sharehistory
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -90,7 +94,20 @@ unsetopt HIST_VERIFY
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git)
+zsh-defer source "$ZSH/plugins/docker/docker.plugin.zsh"
+zsh-defer source "$ZSH/plugins/docker-compose/docker-compose.plugin.zsh"
+zsh-defer source "$ZSH/plugins/git/git.plugin.zsh"
+#zsh-defer source "$ZSH/plugins/vi-mode/vi-mode.plugin.zsh"
 
+# Plugin config 
+#
+# vi-mode
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+VI_MODE_SET_CURSOR=true
+VI_MODE_CURSOR_NORMAL=2  # solid block 
+VI_MODE_CURSOR_VISUAL=1  # blinking block
+VI_MODE_CURSOR_INSERT=5  # blinking line (6 solid)
+VI_MODE_CURSOR_OPPEND=0  # blinking block
 
 # User configuration
 
@@ -131,19 +148,25 @@ source "$HOME/.bash_aliases"
 # NVM
 if [ -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  [ -s "$NVM_DIR/nvm.sh" ] && zsh-defer source "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && zsh-defer source "$NVM_DIR/bash_completion"
 fi
 
-# Created by `pipx` on 2025-12-22 03:27:30
 if [ -d "$HOME/.local/bin" ]; then
-  export PATH="$PATH:/Users/john/.local/bin"
+  export PATH="$PATH:$HOME/.local/bin"
 fi 
 
 # pnpm
-export PNPM_HOME="/Users/john/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+#GH_SSH_KEY="$HOME/.ssh/gh_ed25519"
+#if [ -e "$GH_SSH_KEY" && $ADDED_GH_SSH_KEY -ne 1 ]; then
+#  ssh-add --apple-use-keychain "$GH_SSH_KEY"
+#  export ADDED_GH_SSH_KEY=1
+#fi
+export GH_TOKEN=$(cat ~/.key/gh-claude-agency.tok)

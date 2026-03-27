@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
-ROOT_DIR="$(cd "$(dirname "$0")" &> /dev/null && pwd -P)"
+shopt -s extglob
 
-for file in $(ls "$ROOT_DIR" | grep -v "move-in" | grep -v "ghostty.conf"); do
+ROOT_DIR="$(cd "$(dirname "$0")" &>/dev/null && pwd -P)"
+EXCLUDES="move-in.sh|ghostty.conf|*.iterm*"
+
+for file in !($EXCLUDES); do
   echo "Linking '$file'..."
-  ln -ns "$ROOT_DIR/$file" "$HOME/.$file" 
+  ln -ns "$ROOT_DIR/$file" "$HOME/.$file"
 done
 
 mkdir -p "$HOME/.config/ghostty" && ln -s "$ROOT_DIR/ghostty.conf" "$HOME/.config/ghostty/config"
+
+mkdir -p "$HOME/.zshrc.d"
+
+git clone https://github.com/romkatv/zsh-defer.git "$HOME/.zshrc.d/zsh-defer"

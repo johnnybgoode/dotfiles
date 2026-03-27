@@ -23,12 +23,18 @@ alias cls='clear; pwd; ls'
 alias clm='/opt/homebrew/opt/util-linux/bin/column'
 
 alias ff='find . -maxdepth 1 -type f' # all files in cwd
-alias fd='find . -maxdepth 1 -type d | grep -v "^\.$"' # all dirs in cwd excluding '.'
+#alias fd='find . -maxdepth 1 -type d | grep -v "^\.$"' # all dirs in cwd excluding '.'
 #alias nd='find . -maxdepth 1 -type d | wc -l | awk "{print $1 - 1}" }' # count dirs in current dir excluding '.'
 alias nd='find . -maxdepth 1 -type d | grep -v "\.$" | wc -l'
 alias nf='find . -maxdepth 1 -type f | wc -l' # cound files in current dir
 
 alias rmr='rm -r'
+
+alias dsb='docker sandbox'
+alias dsc='docker sandbox create'
+alias dsr='docker sandbox run'
+alias dsl='docker sandbox ls'
+alias dss='docker sandbox stop'
 
 # Grep
 alias grep='grep --color=auto'
@@ -54,10 +60,14 @@ function ta() { tmux attach -dt "${1:-${PWD##*/}}" }
 alias tl='tmux ls'
 alias tk='tmux kill-session -t'
 
+alias claudesb='/Users/jack/bin/claudesb'
+
 # admin
 alias S='sudo'
 alias follow='tail -fn50'
 alias guard='guard -cdl 2.0'
+alias latest='ls -lU1 | tail -1'
+function dsls() { docker sandbox ls --json | jq '.vms[] | select(.name == "'$1'")' }
 
 
 function tryone() { v=($@ -or '.'); echo $v; }
@@ -68,6 +78,8 @@ function mkcp() { mkdir -p "$1" && eval cp "\"$2\" \"$1\""; }
 function mkmv() { mkdir -p "$1" && eval mv "\"$2\" \"$1\""; }
 function swap() { eval mv "\"$1\"" "\"$2\".bk" && eval mv "\"$2\"" "\"$1\"" && eval mv "\"$2\".bk" "\"$2\""; }
 
+# Network
+function ifbytes() { netstat -inlb | tail -n +2 | awk 'BEGIN{ print "Name Ibytes Obytes"} /'"${1:-en0}"'/{ print $1 " " $7 " " $10 }' | column -t; }
 
 function tssh() { 
 	REMOTE=$1; shift;
